@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Farm Stock</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/html5-qrcode@2.3.8/html5-qrcode.min.js"></script>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div id="app"></div>
+
+<div id="modal" class="modal hidden" onclick="if(event.target===this)closeModal()"><div class="sheet" id="sheet"></div></div>
+
+<div id="scan" class="modal hidden">
+  <div class="sheet">
+    <div class="sheethead"><h2>Scan barcode</h2><button class="ghost sm" onclick="closeScanner()">Close</button></div>
+    <p id="scanmsg" class="muted">Point the camera at the barcode.</p>
+    <div id="reader"></div>
+    <label for="manualcode">No camera? Type the barcode</label>
+    <div class="row"><input id="manualcode" inputmode="numeric" placeholder="e.g. 6161100410085" onkeydown="if(event.key==='Enter')useManual()"><button class="primary fit" onclick="useManual()">Use</button></div>
+  </div>
+</div>
+
+<div id="toast" class="toast"></div>
+
+<script src="script.js"></script>
+</body>
+</html>
