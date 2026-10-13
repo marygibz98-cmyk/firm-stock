@@ -769,10 +769,15 @@ function openScanner(cb){
   $('#scanmsg').textContent = 'Point the camera at the barcode.';
   if (!window.Html5Qrcode){ $('#scanmsg').textContent = 'The scanner could not load. Type the barcode below.'; return; }
   try {
-    scanner = new Html5Qrcode('reader');
+    // only look for shop barcodes (faster and more reliable), and use the phone's built-in barcode reader when it has one
+    const F = window.Html5QrcodeSupportedFormats || {};
+    const formats = [F.EAN_13, F.EAN_8, F.UPC_A, F.UPC_E, F.CODE_128, F.CODE_39, F.ITF, F.QR_CODE].filter(x => x !== undefined);
+    scanner = new Html5Qrcode('reader', {verbose: false, formatsToSupport: formats, experimentalFeatures: {useBarCodeDetectorIfSupported: true}});
     scanner.start(
       {facingMode: 'environment'},
-      {fps: 10, qrbox: (w, h) => ({width: Math.floor(Math.min(300, w * 0.85)), height: Math.floor(Math.min(170, h * 0.6))})},
+      {fps: 15,
+       qrbox: (w, h) => ({width: Math.floor(Math.min(420, w * 0.92)), height: Math.floor(Math.min(200, h * 0.55))}),
+       videoConstraints: {facingMode: 'environment', width: {ideal: 1920}, height: {ideal: 1080}, advanced: [{focusMode: 'continuous'}]}},
       code => { const c = scanCb; closeScanner(); if (navigator.vibrate) navigator.vibrate(80); if (c) c(code); },
       () => {}
     ).catch(() => { $('#scanmsg').textContent = 'Camera is not available. Allow camera access, or type the barcode below.'; });
